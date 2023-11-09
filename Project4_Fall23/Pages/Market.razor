@@ -1,0 +1,139 @@
+﻿@page "/market"
+@using System
+@using System.Linq
+@using TableModels
+@using static MudBlazor.CategoryTypes
+@using Project4_Fall23.Services
+@inject MudBlazor.ISnackbar snackBar
+@inject IDialogService DialogueService
+@inject IJSRuntime JsRuntime
+
+<MudText Typo="Typo.h4">Markets</MudText>
+<MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+          Style="color: white" Elevation="25" Items="GetAll()" Filter="(market) => Search(market.MarketNumber)" @bind-store="market">
+
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Markets</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="marketNumber" Placeholder="Search by market number" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Market Number</MudTh>
+        <MudTh>Point Of Contact</MudTh>
+        <MudTh>Stores</MudTh>        
+        <MudTh> Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Market Info">@market.MarketNumber</MudTd>
+        <MudTd DataLabel="Market Info">@market.Poc</MudTd>
+        <MudTd DataLabel="Market Info">@market.Stores</MudTd>        
+        <MudTd DataLabel="Actions">
+            <MudFab OnClick="@(()=>Update(market))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
+            <MudFab OnClick="@(()=>Delete(market))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudPagination ShowFirstButton="true" ShowLastButton="true" SelectedChanged="PageChanged" Count="@((_table.GetFilteredItemsCount() + _table.RowsPerPage - 1) / _table.RowsPerPage)" Class="pa-4" />
+    </PagerContent>
+</MudTable>
+
+<br/>
+
+<!--Add/Edit POC-->
+<MudCard Elevation="25"> 
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Add/Edit Market</MudText>            
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <EditForm OnValidSubmit="Add" OnInvalidSubmit='()=>snackBar.Add("Provide required information",Severity.Warning)' Model="@market">
+            <MudGrid>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="market.MarketNumber" Label="MarketNumber" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="market.Poc" Label="PointOfContact" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="market.Stores" Label="Stores" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>              
+            </MudGrid>
+            <br/>
+            <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Add">Add/Edit Market</MudButton>
+        </EditForm>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    //market number, poc, stores
+    private int marketNumber = 0;
+    private TableModels.Market market = new TableModels.Market();
+    private List<TableModels.Market> markets = new List<TableModels.Market>();
+    private MudTable<TableModels.Market> _table;
+    private TableModels.Store stores = new TableModels.Store();
+    private TableModels.PointOfContact poc = new TableModels.PointOfContact();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        markets = marketService.GetAll();
+    }
+
+    private bool Search(int marketNumber)
+    {
+        if (market.MarketNumber == 0)
+        {
+            return true;
+        }
+        if (market.MarketNumber == marketNumber)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private List<TableModels.Market> GetAll()
+    {
+        markets = marketService.GetAll();
+        return markets;
+    }
+
+    private void Add()
+    {
+        if (market.MarketNumber == 0)
+        {
+            marketService.Add(market);
+        }
+        else
+        {
+            marketService.Update(market);
+        }
+        market = new TableModels.Market();
+        snackBar.Add("Store successfully updated", Severity.Success);
+        GetAll();
+    }
+
+    private void Update(TableModels.Market record)
+    {
+        market = record;
+        StateHasChanged();
+    }
+
+    private async Task Delete(TableModels.Market record)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            marketService.Delete(record);
+            snackBar.Add("Store Deleted!", Severity.Success);
+            GetAll();
+        }
+    }
+
+    private void PageChanged(int i)
+    {
+        _table.NavigateTo(i - 1);
+    }
+}

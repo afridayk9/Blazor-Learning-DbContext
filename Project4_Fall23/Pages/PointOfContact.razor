@@ -1,0 +1,158 @@
+﻿@page "/pointofcontact"
+@using System
+@using System.Linq
+@using TableModels
+@using static MudBlazor.CategoryTypes
+@inject MudBlazor.ISnackbar snackBar
+@inject IDialogService DialogueService
+@inject IJSRuntime JsRuntime
+
+
+<MudText Typo="Typo.h4">Points of Contact</MudText>
+<MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+          Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" @bind-pointOfContact="pointOfContact">
+          
+
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Points of Contact</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search by First Name" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Title</MudTh>
+        <MudTh>First Name</MudTh>
+        <MudTh>Last Name</MudTh>
+        <MudTh>Phone Number</MudTh>
+        <MudTh>Email Address</MudTh>
+        <MudTh>Store Number</MudTh>
+        <MudTh>Market Number</MudTh>
+        <MudTh> Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Point of Contact Info">@context.Title</MudTd>
+        <MudTd DataLabel="Point of Contact Info">@context.FirstName</MudTd>
+        <MudTd DataLabel="Point of Contact Info">@context.LastName</MudTd>
+        <MudTd DataLabel="Point of Contact Info">@context.PhoneNumber</MudTd>
+        <MudTd DataLabel="Point of Contact Info">@context.EmailAddress</MudTd>
+        <MudTd DataLabel="Point of Contact Info">@context.StoreNumber</MudTd>
+        <MudTd DataLabel="Point of Contact Info">@context.MarketNumber</MudTd>
+        <MudTd DataLabel="Actions">
+            <MudFab OnClick="@(()=>Update(context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
+            <MudFab OnClick="@(()=>Delete(context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudPagination ShowFirstButton="true" ShowLastButton="true" SelectedChanged="PageChanged" Count="@((_table.GetFilteredItemsCount() + _table.RowsPerPage - 1) / _table.RowsPerPage)" Class="pa-4" />
+    </PagerContent>
+</MudTable>
+
+<br/>
+
+<!--Add/Edit POC-->
+<MudCard Elevation="25"> 
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Add/Edit Point Of Contact</MudText>            
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <EditForm OnValidSubmit="Add" OnInvalidSubmit='()=>snackBar.Add("Provide a name",Severity.Warning)' Model="@pointOfContact">
+            <MudGrid>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="pointOfContact.Title" Label="Title" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="pointOfContact.FirstName" Label="First Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="pointOfContact.LastName" Label="Last Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="pointOfContact.PhoneNumber" Label="Phone Number" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="pointOfContact.EmailAddress" Label="Email Address" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="pointOfContact.StoreNumber" Label="Store Number" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="pointOfContact.MarketNumber" Label="Market Number" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+            </MudGrid>
+            <br/>
+            <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Add">Add/Edit Point of Contact</MudButton>
+        </EditForm>
+    </MudCardContent>
+</MudCard>
+
+
+@code {
+    private string searchString = "";
+    
+    private TableModels.PointOfContact pointOfContact = new TableModels.PointOfContact();
+    private List<TableModels.PointOfContact> Pocs = new List<TableModels.PointOfContact>();
+    private MudTable<TableModels.PointOfContact> _table;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Pocs = pointOfContactService.GetAll();
+    }
+
+    private bool Search(TableModels.PointOfContact pointOfContact)
+    {
+        if (string.IsNullOrWhiteSpace(searchString)) return true;           
+        
+        if (pointOfContact.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private List<TableModels.PointOfContact> GetAll()
+    {
+        Pocs = pointOfContactService.GetAll();
+        return Pocs;
+    }
+
+    private void Add()
+    {
+        if(pointOfContact.Id == 0)
+        {
+            pointOfContactService.Add(pointOfContact);            
+        }
+        else
+        {
+            pointOfContactService.Update(pointOfContact);
+        }
+        pointOfContact = new TableModels.PointOfContact();
+        snackBar.Add("Point of Contact Succesfully updated", Severity.Success);
+        GetAll();
+    }
+
+    private void Update(TableModels.PointOfContact record)
+    {
+        pointOfContact = record;
+        StateHasChanged();
+    }
+
+    private async Task Delete(TableModels.PointOfContact record)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            pointOfContactService.Delete(record);
+            snackBar.Add("Point of Contact Deleted!", Severity.Success);
+            GetAll();
+        }
+    }
+
+   private void PageChanged(int i)
+    {
+        _table.NavigateTo(i - 1);
+    }
+
+}
+

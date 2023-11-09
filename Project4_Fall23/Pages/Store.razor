@@ -1,0 +1,158 @@
+﻿@page "/store"
+@using System
+@using System.Linq
+@using TableModels
+@using static MudBlazor.CategoryTypes
+@using Project4_Fall23.Services
+@inject MudBlazor.ISnackbar snackBar
+@inject IDialogService DialogueService
+@inject IJSRuntime JsRuntime
+
+<MudText Typo="Typo.h4">Stores</MudText>
+<MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+          Style="color: white" Elevation="25" Items="GetAll()" Filter="(store) => Search(store.StoreNumber)" @bind-store="store">
+
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Stores</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="storeNumber" Placeholder="Search by store number" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Store Number</MudTh>
+        <MudTh>Point of Contact</MudTh>
+        <MudTh>Phone Number</MudTh>
+        <MudTh>Street Address</MudTh>
+        <MudTh>City</MudTh>
+        <MudTh>State</MudTh>
+        <MudTh>Postal Code</MudTh>
+        <MudTh> Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Store Info">@store.StoreNumber</MudTd>
+        <MudTd DataLabel="Store Info">@store.Poc</MudTd>
+        <MudTd DataLabel="Store Info">@store.PhoneNumber</MudTd>
+        <MudTd DataLabel="Store Info">@store.StreetAddress</MudTd>
+        <MudTd DataLabel="Store Info">@store.City</MudTd>
+        <MudTd DataLabel="Store Info">@store.State</MudTd>
+        <MudTd DataLabel="Store Info">@store.PostalCode</MudTd>
+        <MudTd DataLabel="Actions">
+            <MudFab OnClick="@(()=>Update(store))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
+            <MudFab OnClick="@(()=>Delete(store))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudPagination ShowFirstButton="true" ShowLastButton="true" SelectedChanged="PageChanged" Count="@((_table.GetFilteredItemsCount() + _table.RowsPerPage - 1) / _table.RowsPerPage)" Class="pa-4" />
+    </PagerContent>
+</MudTable>
+
+<br/>
+
+<!--Add/Edit POC-->
+<MudCard Elevation="25"> 
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Add/Edit Store</MudText>            
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <EditForm OnValidSubmit="Add" OnInvalidSubmit='()=>snackBar.Add("Provide required information",Severity.Warning)' Model="@store">
+            <MudGrid>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="store.StoreNumber" Label="StoreNumber" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="store.Poc" Label="PointOfContact" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="store.PhoneNumber" Label="PhoneNumber" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="store.StreetAddress" Label="StreetAddress" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="store.City" Label="City" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="store.State" Label="State" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="store.PostalCode" Label="PostalCode" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+            </MudGrid>
+            <br/>
+            <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Add">Add/Edit Store</MudButton>
+        </EditForm>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private int storeNumber = 0;
+    private TableModels.Store store = new TableModels.Store();
+    private List<TableModels.Store> stores = new List<TableModels.Store>();
+    private MudTable<TableModels.Store> _table;
+    private TableModels.PointOfContact poc = new TableModels.PointOfContact();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        stores = storeService.GetAll();
+    }
+
+    private bool Search(int storeNumber)
+    {
+        if (store.StoreNumber == 0)
+        {
+            return true;
+        }
+        if ( store.StoreNumber == storeNumber)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private List<TableModels.Store> GetAll()
+    {
+        stores = storeService.GetAll();
+        return stores;
+    }
+
+    private void Add()
+    {
+        if (store.StoreNumber == 0)
+        {
+            storeService.Add(store);
+        }
+        else
+        {
+            storeService.Update(store);
+        }
+        store = new TableModels.Store();
+        snackBar.Add("Store successfully updated", Severity.Success);
+        GetAll();
+    }
+
+    private void Update(TableModels.Store record)
+    {
+        store = record;
+        StateHasChanged();
+    }
+
+    private async Task Delete(TableModels.Store record)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if(confirmed)
+        {
+            storeService.Delete(record);
+            snackBar.Add("Store Deleted!", Severity.Success);
+            GetAll();
+        }
+    }
+
+    private void PageChanged(int i)
+    {
+        _table.NavigateTo(i - 1);
+    }
+
+}
