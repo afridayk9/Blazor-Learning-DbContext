@@ -10,7 +10,7 @@
 
 <MudText Typo="Typo.h4">Markets</MudText>
 <MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-          Style="color: white" Elevation="25" Items="GetAll()" Filter="(market) => Search(market.MarketNumber)" @bind-store="market">
+          Style="color: white" Elevation="25" Items="GetAll()" Filter="(market) => Search(market.MarketNumber)" @bind-market="market">
 
 
     <ToolBarContent>
@@ -21,13 +21,13 @@
     <HeaderContent>
         <MudTh>Market Number</MudTh>
         <MudTh>Point Of Contact</MudTh>
-        <MudTh>Stores</MudTh>        
+              
         <MudTh> Actions</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Market Info">@market.MarketNumber</MudTd>
-        <MudTd DataLabel="Market Info">@market.Poc</MudTd>
-        <MudTd DataLabel="Market Info">@market.Stores</MudTd>        
+        <MudTd DataLabel="Market Info">@context.MarketNumber</MudTd>
+        <MudTd DataLabel="Market Info">@context.Poc</MudTd>
+              
         <MudTd DataLabel="Actions">
             <MudFab OnClick="@(()=>Update(market))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
             <MudFab OnClick="@(()=>Delete(market))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
@@ -56,9 +56,6 @@
                 <MudItem xs="12" sm="4" md="6">
                     <MudTextField @bind-Value="market.Poc" Label="PointOfContact" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
                 </MudItem>
-                <MudItem xs="12" sm="4" md="6">
-                    <MudTextField @bind-Value="market.Stores" Label="Stores" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
-                </MudItem>              
             </MudGrid>
             <br/>
             <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="Add">Add/Edit Market</MudButton>
@@ -72,7 +69,7 @@
     private TableModels.Market market = new TableModels.Market();
     private List<TableModels.Market> markets = new List<TableModels.Market>();
     private MudTable<TableModels.Market> _table;
-    private TableModels.Store stores = new TableModels.Store();
+
     private TableModels.PointOfContact poc = new TableModels.PointOfContact();
 
 
@@ -92,12 +89,14 @@
             return true;
         }
         return false;
+        StateHasChanged();
     }
 
     private List<TableModels.Market> GetAll()
     {
         markets = marketService.GetAll();
         return markets;
+        StateHasChanged();
     }
 
     private void Add()
@@ -113,6 +112,7 @@
         market = new TableModels.Market();
         snackBar.Add("Store successfully updated", Severity.Success);
         GetAll();
+        StateHasChanged();
     }
 
     private void Update(TableModels.Market record)
@@ -130,6 +130,7 @@
             snackBar.Add("Store Deleted!", Severity.Success);
             GetAll();
         }
+        StateHasChanged();
     }
 
     private void PageChanged(int i)

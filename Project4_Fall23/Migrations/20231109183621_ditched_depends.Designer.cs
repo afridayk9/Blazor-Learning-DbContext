@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project4_Fall23;
 
@@ -10,26 +11,28 @@ using Project4_Fall23;
 namespace Project4_Fall23.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231109183621_ditched_depends")]
+    partial class ditched_depends
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
 
             modelBuilder.Entity("TableModels.Market", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("MarketNumber")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Poc")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("Stores")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("MarketNumber");
 
                     b.ToTable("Market");
                 });
@@ -68,7 +71,7 @@ namespace Project4_Fall23.Migrations
 
             modelBuilder.Entity("TableModels.Store", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("StoreNumber")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -87,13 +90,10 @@ namespace Project4_Fall23.Migrations
                     b.Property<string>("State")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("StoreNumber")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("StreetAddress")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("StoreNumber");
 
                     b.ToTable("Store");
                 });

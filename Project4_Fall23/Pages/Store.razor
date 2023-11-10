@@ -29,13 +29,13 @@
         <MudTh> Actions</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Store Info">@store.StoreNumber</MudTd>
-        <MudTd DataLabel="Store Info">@store.Poc</MudTd>
-        <MudTd DataLabel="Store Info">@store.PhoneNumber</MudTd>
-        <MudTd DataLabel="Store Info">@store.StreetAddress</MudTd>
-        <MudTd DataLabel="Store Info">@store.City</MudTd>
-        <MudTd DataLabel="Store Info">@store.State</MudTd>
-        <MudTd DataLabel="Store Info">@store.PostalCode</MudTd>
+        <MudTd DataLabel="Store Info">@context.StoreNumber</MudTd>
+        <MudTd DataLabel="Store Info">@context.Poc</MudTd>
+        <MudTd DataLabel="Store Info">@context.PhoneNumber</MudTd>
+        <MudTd DataLabel="Store Info">@context.StreetAddress</MudTd>
+        <MudTd DataLabel="Store Info">@context.City</MudTd>
+        <MudTd DataLabel="Store Info">@context.State</MudTd>
+        <MudTd DataLabel="Store Info">@context.PostalCode</MudTd>
         <MudTd DataLabel="Actions">
             <MudFab OnClick="@(()=>Update(store))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
             <MudFab OnClick="@(()=>Delete(store))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>

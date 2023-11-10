@@ -11,8 +11,9 @@ namespace TableModels
     public class Market
     {
         [Key]
+        public int Id { get; set; }
         public int MarketNumber { get; set; }
-        public PointOfContact? Poc { get; set; }
-        public List<Store>? Stores { get; set; }
+        public string? Poc { get; set; }
+        
     }
 }
