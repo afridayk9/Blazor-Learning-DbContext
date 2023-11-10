@@ -1,0 +1,57 @@
+﻿@page "/about"
+
+<h3>ProjectInfo</h3>
+
+<ol>
+    <li>after downloading and cleaning a fresh blazor project create a new project in the solution</li>
+        <ul>in this new project, create the table models used to create the tables in the DB</ul>
+    <li>using DB Browser for SQLite create a new DB and save that file in the Data Folder of your first project folder in your solution</li>
+    <li>you should see a fileName.db (fileName being your specific fileName) in the data folder of your project</li>
+    <li>download necessary NuGet Packages</li>
+        <ul>Microsoft.EntityFrameworkCore</ul>
+        <ul>Microsoft.EntityFrameworkCore.Sqlite</ul>
+        <ul>Microsoft.EntityFrameworkCore.Tools</ul>
+        <ul>Microsoft.EntityFrameworkCore.MudBlazor (if you are using MudBlazor, its just for looks. not necessary)</ul>
+    
+    <li>Create a new class inside your project folder to contain your DB context</li>
+        <ul>make this class inherit from DbContext. this will require a using Microsoft.EntityFrameworkCore statement at the top</ul>
+        <ul>$in your ctor take in "DbContextOptions nameOfYourContext  options" inheriting base(options) </ul>
+        <ul>use a virtual datatype and a DbSet object to get/set your tables</ul>
+    <li>Register the DbContext class you created in the Program.cs file</li>
+        <ul>you will need a connection string to do with correctly, we will get to that next</ul>
+        <ul>This is going to take in the db context class you just created and pair it with a the .db file in your data folder</ul>
+        <ul>if you are using something other than sqlite, your .UseSqlite might be different</ul>
+    <li>add your connection string to appsettings.json file</li>
+        <ul>your data source is going to be the specific file path to your db file</ul>
+        <ul>Since we put it in the data folder here it will be "Data\\FI_Tool.db"</ul>
+        <ul>make sure the name of the connection string matches what you used when you registered it in program.cs. I used DefaulConnection</ul>
+    <li>Once you have the DbContext class created and its registered open up the package manager console, if its not open already</li>
+    <li>in your package manager console create your migrations and update db file you previously created</li>
+        <ul>type "add-migration NameYourMigration" and hit enter</ul>
+        <ul>you will see a new folder in your project called migrations, this holds the SQL code that CRUDs your tables</ul>
+        <ul>type "update-database" then hit enter. this applies the migration to your db file. you not see any updates to your db until this step is comlete  </ul>
+        <ul>this only works if you have the previously mentioned packaged, so check your dependencies if these dont work for you</ul>
+    <li>to verify this worked correctly, open your .db file in DbBrowser and ctrl r to refresh. you should now see your tables that you created in the 2nd project</li>
+    <li>if it looks good, now is a good time to push to GitHub (if you are using it)</li>
+    <li>Add a new folder to your main project for interfaces</li>
+        <ul>I wanted to learn more about Generics, so I applied that here</ul>
+    <li>after you name your interface, let it take in T and define that T is going to inherit a class</li>
+        <ul>your create, update, delete methods will be bool that take in a T (a class) named entity (or whatever you want to call it)</ul>
+        <ul>your read methods are either going to create a list of T and get all, or take in an int (im using PK)</ul>
+    <li>Create your generic service that inherits from this generic interface</li>
+        <ul>your generic service will also take in T : your Generic interface where t : class</ul>
+        <ul>create a readonly that takes in the class name of your dbcontext you created and call it context</ul>
+        <ul>call in IQueryable that takes in T. this will help with plugging in the name of your class to the T value</ul>
+
+
+        
+
+
+
+
+
+</ol>
+
+@code {
+
+}

@@ -15,6 +15,7 @@ namespace Project4_Fall23
         public virtual DbSet<PointOfContact> PointOfContact { get; set; }
         public virtual DbSet<Store> Store { get; set; }
         public virtual DbSet<Market> Market { get; set; }
+        public virtual DbSet<Leads> Leads { get; set; }
 
 
     }

@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddTransient<MarketService>();
 builder.Services.AddTransient<PointOfContactService>();
 builder.Services.AddTransient<StoreService>();
+builder.Services.AddTransient<LeadsService>();
 
 var app = builder.Build();
 
