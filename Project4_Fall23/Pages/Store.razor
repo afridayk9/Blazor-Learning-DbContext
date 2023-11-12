@@ -9,8 +9,8 @@
 @inject IJSRuntime JsRuntime
 
 <MudText Typo="Typo.h4">Stores</MudText>
-<MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-          Style="color: white" Elevation="25" Items="GetAll()" Filter="(store) => Search(store.StoreNumber)" @bind-store="store">
+<MudTable RowsPerPage="12" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+          Style="color: white" Elevation="25" Items="GetAll()" Filter="(store) => Search(store.StoreNumber)" SortLabel="SortBy" @bind-store="store">
 
 
     <ToolBarContent>
@@ -19,13 +19,27 @@
         <MudTextField @bind-Value="storeNumber" Placeholder="Search by store number" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh>Store Number</MudTh>
-        <MudTh>Point of Contact</MudTh>
-        <MudTh>Phone Number</MudTh>
-        <MudTh>Street Address</MudTh>
-        <MudTh>City</MudTh>
-        <MudTh>State</MudTh>
-        <MudTh>Postal Code</MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.StoreNumber)">Store Number</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.Poc)">POC</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.PhoneNumber)">Phone Number</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.StreetAddress)">Street Address</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.City)">City</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.State)">State</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.PostalCode)">Postal Code</MudTableSortLabel>
+        </MudTh>
         <MudTh> Actions</MudTh>
     </HeaderContent>
     <RowTemplate>
@@ -37,8 +51,8 @@
         <MudTd DataLabel="Store Info">@context.State</MudTd>
         <MudTd DataLabel="Store Info">@context.PostalCode</MudTd>
         <MudTd DataLabel="Actions">
-            <MudFab OnClick="@(()=>Update(store))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
-            <MudFab OnClick="@(()=>Delete(store))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
+            <MudFab OnClick="@(()=>Update(context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
+            <MudFab OnClick="@(()=>Delete(context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -120,7 +134,7 @@
 
     private void Add()
     {
-        if (store.StoreNumber == 0)
+        if (store.Id == 0)
         {
             storeService.Add(store);
         }

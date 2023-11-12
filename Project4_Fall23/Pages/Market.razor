@@ -10,7 +10,7 @@
 
 <MudText Typo="Typo.h4">Markets</MudText>
 <MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-          Style="color: white" Elevation="25" Items="GetAll()" Filter="(market) => Search(market.MarketNumber)" @bind-market="market">
+          Style="color: white" Elevation="25" Items="GetAll()" Filter="(market) => Search(market.MarketNumber)" SortLabel="SortBy" @bind-market="market">
 
 
     <ToolBarContent>
@@ -19,7 +19,9 @@
         <MudTextField @bind-Value="marketNumber" Placeholder="Search by market number" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh>Market Number</MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Market" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Market, object>)(x => x.MarketNumber)">Market</MudTableSortLabel>
+        </MudTh>
         <MudTh>Point Of Contact</MudTh>
               
         <MudTh> Actions</MudTh>
@@ -29,8 +31,8 @@
         <MudTd DataLabel="Market Info">@context.Poc</MudTd>
               
         <MudTd DataLabel="Actions">
-            <MudFab OnClick="@(()=>Update(market))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
-            <MudFab OnClick="@(()=>Delete(market))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
+            <MudFab OnClick="@(()=>Update(context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
+            <MudFab OnClick="@(()=>Delete(context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -80,7 +82,7 @@
 
     private bool Search(int marketNumber)
     {
-        if (market.MarketNumber == 0)
+        if (market.Id == 0)
         {
             return true;
         }
@@ -89,14 +91,14 @@
             return true;
         }
         return false;
-        StateHasChanged();
+        
     }
 
     private List<TableModels.Market> GetAll()
     {
         markets = marketService.GetAll();
         return markets;
-        StateHasChanged();
+        
     }
 
     private void Add()
@@ -112,7 +114,7 @@
         market = new TableModels.Market();
         snackBar.Add("Store successfully updated", Severity.Success);
         GetAll();
-        StateHasChanged();
+        
     }
 
     private void Update(TableModels.Market record)
@@ -130,7 +132,7 @@
             snackBar.Add("Store Deleted!", Severity.Success);
             GetAll();
         }
-        StateHasChanged();
+        
     }
 
     private void PageChanged(int i)

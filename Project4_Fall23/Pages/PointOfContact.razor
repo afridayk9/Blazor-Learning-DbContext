@@ -9,8 +9,8 @@
 
 
 <MudText Typo="Typo.h4">Points of Contact</MudText>
-<MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-          Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" @bind-pointOfContact="pointOfContact">
+<MudTable RowsPerPage="12" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+          Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" SortLabel="SortBy" @bind-pointOfContact="pointOfContact">
           
 
 
@@ -20,14 +20,28 @@
         <MudTextField @bind-Value="searchString" Placeholder="Search by First Name" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh>Title</MudTh>
-        <MudTh>First Name</MudTh>
-        <MudTh>Last Name</MudTh>
-        <MudTh>Phone Number</MudTh>
-        <MudTh>Email Address</MudTh>
-        <MudTh>Store Number</MudTh>
-        <MudTh>Market Number</MudTh>
-        <MudTh> Actions</MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.PointOfContact" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.PointOfContact, object>)(x => x.Title)">Title</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.PointOfContact" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.PointOfContact, object>)(x => x.FirstName)">First Name</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.PointOfContact" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.PointOfContact, object>)(x => x.LastName)">Last Name</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.PointOfContact" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.PointOfContact, object>)(x => x.PhoneNumber)">Phone Number</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.PointOfContact" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.PointOfContact, object>)(x => x.EmailAddress)">Email Address</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.PointOfContact" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.PointOfContact, object>)(x => x.StoreNumber)">Store Number</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.PointOfContact" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.PointOfContact, object>)(x => x.MarketNumber)">Market Number</MudTableSortLabel>
+        </MudTh>
+        <MudTh>Actions</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Point of Contact Info">@context.Title</MudTd>

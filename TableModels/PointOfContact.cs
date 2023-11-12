@@ -16,8 +16,8 @@ namespace TableModels
         public string? LastName { get; set; }
         public string? PhoneNumber { get; set; }
         public string? EmailAddress { get; set; }
-        public int? StoreNumber { get; set; }
-        public int? MarketNumber { get; set; }
+        public int StoreNumber { get; set; }
+        public int MarketNumber { get; set; }
 
 
     }

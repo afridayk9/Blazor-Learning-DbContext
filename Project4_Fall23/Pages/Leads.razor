@@ -30,13 +30,13 @@
         <MudTh> Actions</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Point of Contact Info">@context.Category</MudTd>
-        <MudTd DataLabel="Point of Contact Info">@context.FirstName</MudTd>
-        <MudTd DataLabel="Point of Contact Info">@context.LastName</MudTd>
-        <MudTd DataLabel="Point of Contact Info">@context.StoreNumber</MudTd>
-        <MudTd DataLabel="Point of Contact Info">@context.Status</MudTd>
-        <MudTd DataLabel="Point of Contact Info">@context.PersonContacted</MudTd>
-        <MudTd DataLabel="Point of Contact Info">@context.DateContacted</MudTd>
+        <MudTd DataLabel="Lead Info">@context.Category</MudTd>
+        <MudTd DataLabel="Lead  Info">@context.FirstName</MudTd>
+        <MudTd DataLabel="Lead  Info">@context.LastName</MudTd>
+        <MudTd DataLabel="Lead  Info">@context.StoreNumber</MudTd>
+        <MudTd DataLabel="Lead  Info">@context.Status</MudTd>
+        <MudTd DataLabel="Lead  Info">@context.PersonContacted</MudTd>
+        <MudTd DataLabel="Lead  Info">@context.DateContacted</MudTd>
         <MudTd DataLabel="Actions">
             <MudFab OnClick="@(()=>Update(context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
             <MudFab OnClick="@(()=>Delete(context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
@@ -78,7 +78,7 @@
                     <MudTextField @bind-Value="lead.PersonContacted" Label="Person Contacted" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
                 </MudItem>
                 <MudItem xs="12" sm="4" md="6">
-                    <MudTextField @bind-Value="lead.DateContacted" Label="Date Contacted POC" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                    <MudTextField @bind-Value="lead.DateContacted" Format="MM/dd/yyyy" Label="Date Contacted POC" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
                 </MudItem>
             </MudGrid>
             <br/>
