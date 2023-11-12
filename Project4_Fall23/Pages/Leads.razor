@@ -20,13 +20,27 @@
         <MudTextField @bind-Value="storeNumber" Placeholder="Search by Store Number" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh>Category</MudTh>
-        <MudTh>First Name</MudTh>
-        <MudTh>Last Name</MudTh>
-        <MudTh>Store Number</MudTh>
-        <MudTh>Status</MudTh>
-        <MudTh>Person Contacted</MudTh>
-        <MudTh>DateContacted</MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Leads" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Leads, object>)(x => x.Category)">Category</MudTableSortLabel>
+        </MudTh>
+        <MudTh>            
+            <MudTableSortLabel T="TableModels.Leads" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Leads, object>)(x => x.FirstName)">First Name</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Leads" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Leads, object>)(x => x.LastName)">LastName</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Leads" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Leads, object>)(x => x.StoreNumber)">Store Number</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Leads" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Leads, object>)(x => x.Status)">Status</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Leads" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Leads, object>)(x => x.PersonContacted)">Person Contacted</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Leads" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Leads, object>)(x => x.DateContacted)">Date Contacted</MudTableSortLabel>
+        </MudTh>
         <MudTh> Actions</MudTh>
     </HeaderContent>
     <RowTemplate>
@@ -36,7 +50,7 @@
         <MudTd DataLabel="Lead  Info">@context.StoreNumber</MudTd>
         <MudTd DataLabel="Lead  Info">@context.Status</MudTd>
         <MudTd DataLabel="Lead  Info">@context.PersonContacted</MudTd>
-        <MudTd DataLabel="Lead  Info">@context.DateContacted</MudTd>
+        <MudTd DataLabel="Lead  Info">@context.DateContacted?.ToShortDateString()</MudTd>
         <MudTd DataLabel="Actions">
             <MudFab OnClick="@(()=>Update(context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small"></MudFab>
             <MudFab OnClick="@(()=>Delete(context))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small"></MudFab>
@@ -78,7 +92,7 @@
                     <MudTextField @bind-Value="lead.PersonContacted" Label="Person Contacted" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
                 </MudItem>
                 <MudItem xs="12" sm="4" md="6">
-                    <MudTextField @bind-Value="lead.DateContacted" Format="MM/dd/yyyy" Label="Date Contacted POC" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                    <MudTextField @bind-Value="lead.DateContacted" Placeholder="mm/dd/yyyy" Format="MM/dd/yyyy" Label="Date Contacted POC" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
                 </MudItem>
             </MudGrid>
             <br/>
