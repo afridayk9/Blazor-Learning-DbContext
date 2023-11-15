@@ -10,39 +10,43 @@
 
 <MudText Typo="Typo.h4">Stores</MudText>
 <MudTable RowsPerPage="12" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-          Style="color: white" Elevation="25" Items="GetAll()" Filter="(store) => Search(store.StoreNumber)" SortLabel="SortBy" @bind-store="store">
+          Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" SortLabel="SortBy" @bind-store="store">
 
 
     <ToolBarContent>
         <MudText Typo="Typo.h6">Stores</MudText>
         <MudSpacer />
-        <MudTextField @bind-Value="storeNumber" Placeholder="Search by store number" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudTextField @bind-Value="searchString" Placeholder="Search by store number" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>
-            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.StoreNumber)">Store Number</MudTableSortLabel>
+            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.MarketNumber)">Market Number</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.Poc)">POC</MudTableSortLabel>
+            <MudTableSortLabel T="TableModels.Store"  SortBy="(System.Func<TableModels.Store, object>)(x => x.StoreNumber)">Store Number</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.PhoneNumber)">Phone Number</MudTableSortLabel>
+            <MudTableSortLabel T="TableModels.Store"  SortBy="(System.Func<TableModels.Store, object>)(x => x.Poc)">POC</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.StreetAddress)">Street Address</MudTableSortLabel>
+            <MudTableSortLabel T="TableModels.Store"  SortBy="(System.Func<TableModels.Store, object>)(x => x.PhoneNumber)">Phone Number</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.City)">City</MudTableSortLabel>
+            <MudTableSortLabel T="TableModels.Store"  SortBy="(System.Func<TableModels.Store, object>)(x => x.StreetAddress)">Street Address</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.State)">State</MudTableSortLabel>
+            <MudTableSortLabel T="TableModels.Store"  SortBy="(System.Func<TableModels.Store, object>)(x => x.City)">City</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="TableModels.Store" InitialDirection="SortDirection.Ascending" SortBy="(System.Func<TableModels.Store, object>)(x => x.PostalCode)">Postal Code</MudTableSortLabel>
+            <MudTableSortLabel T="TableModels.Store"  SortBy="(System.Func<TableModels.Store, object>)(x => x.State)">State</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TableModels.Store"  SortBy="(System.Func<TableModels.Store, object>)(x => x.PostalCode)">Postal Code</MudTableSortLabel>
         </MudTh>
         <MudTh> Actions</MudTh>
     </HeaderContent>
     <RowTemplate>
+        <MudTd DataLabel="Store Info">@context.MarketNumber</MudTd>
         <MudTd DataLabel="Store Info">@context.StoreNumber</MudTd>
         <MudTd DataLabel="Store Info">@context.Poc</MudTd>
         <MudTd DataLabel="Store Info">@context.PhoneNumber</MudTd>
@@ -73,6 +77,9 @@
         <EditForm OnValidSubmit="Add" OnInvalidSubmit='()=>snackBar.Add("Provide required information",Severity.Warning)' Model="@store">
             <MudGrid>
                 <MudItem xs="12" sm="4" md="6">
+                    <MudTextField @bind-Value="store.MarketNumber" Label="MarketNumber" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="6">
                     <MudTextField @bind-Value="store.StoreNumber" Label="StoreNumber" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
                 </MudItem>
                 <MudItem xs="12" sm="4" md="6">
@@ -101,7 +108,7 @@
 </MudCard>
 
 @code {
-    private int storeNumber = 0;
+    private string searchString = "";
     private TableModels.Store store = new TableModels.Store();
     private List<TableModels.Store> stores = new List<TableModels.Store>();
     private MudTable<TableModels.Store> _table;
@@ -113,13 +120,11 @@
         stores = storeService.GetAll();
     }
 
-    private bool Search(int storeNumber)
+    private bool Search(TableModels.Store store)
     {
-        if (store.StoreNumber == 0)
-        {
-            return true;
-        }
-        if ( store.StoreNumber == storeNumber)
+        if (string.IsNullOrWhiteSpace(searchString)) return true;           
+        
+        if (store.StoreNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
         {
             return true;
         }

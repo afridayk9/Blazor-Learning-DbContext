@@ -11,7 +11,8 @@ namespace TableModels
     {
         [Key]
         public int Id { get; set; }
-        public int StoreNumber { get; set; }
+        public string? StoreNumber { get; set; }
+        public string? MarketNumber { get; set; }
         public string? Poc { get; set; }
         public string? PhoneNumber { get; set; }
         public string? StreetAddress { get; set; }

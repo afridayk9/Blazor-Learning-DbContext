@@ -10,13 +10,13 @@
 
 <MudText Typo="Typo.h4">Markets</MudText>
 <MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-          Style="color: white" Elevation="25" Items="GetAll()" Filter="(market) => Search(market.MarketNumber)" SortLabel="SortBy" @bind-market="market">
+          Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" SortLabel="SortBy" @bind-market="market">
 
 
     <ToolBarContent>
         <MudText Typo="Typo.h6">Markets</MudText>
         <MudSpacer />
-        <MudTextField @bind-Value="marketNumber" Placeholder="Search by market number" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>
@@ -67,7 +67,7 @@
 
 @code {
     //market number, poc, stores
-    private int marketNumber = 0;
+    private string searchString = "";
     private TableModels.Market market = new TableModels.Market();
     private List<TableModels.Market> markets = new List<TableModels.Market>();
     private MudTable<TableModels.Market> _table;
@@ -80,18 +80,15 @@
         markets = marketService.GetAll();
     }
 
-    private bool Search(int marketNumber)
+    private bool Search(TableModels.Market market)
     {
-        if (market.Id == 0)
-        {
-            return true;
-        }
-        if (market.MarketNumber == marketNumber)
+        if (string.IsNullOrWhiteSpace(searchString)) return true;           
+        
+        if (market.MarketNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
         {
             return true;
         }
         return false;
-        
     }
 
     private List<TableModels.Market> GetAll()
@@ -103,7 +100,7 @@
 
     private void Add()
     {
-        if (market.MarketNumber == 0)
+        if (market.Id == 0)
         {
             marketService.Add(market);
         }

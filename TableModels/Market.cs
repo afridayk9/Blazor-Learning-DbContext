@@ -12,7 +12,7 @@ namespace TableModels
     {
         [Key]
         public int Id { get; set; }
-        public int MarketNumber { get; set; }
+        public string? MarketNumber { get; set; }
         public string? Poc { get; set; }
         
     }
