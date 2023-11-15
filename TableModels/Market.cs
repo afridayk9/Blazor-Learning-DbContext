@@ -8,6 +8,9 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace TableModels
 {
+    /// <summary>
+    /// a model used to structure the data in the Market Table
+    /// </summary>
     public class Market
     {
         [Key]

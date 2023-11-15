@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace TableModels
 {
+    /// <summary>
+    /// a model used to structure the data in the PointofContact Table
+    /// </summary>
     public class PointOfContact
     {
         [Key]

@@ -8,6 +8,7 @@
 @inject IDialogService DialogueService
 @inject IJSRuntime JsRuntime
 
+<!--Show all records in the Market Table-->
 <MudText Typo="Typo.h4">Markets</MudText>
 <MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
           Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" SortLabel="SortBy" @bind-market="market">
@@ -42,7 +43,7 @@
 
 <br/>
 
-<!--Add/Edit POC-->
+<!--Add/Edit record in the Market Table-->
 <MudCard Elevation="25"> 
     <MudCardHeader>
         <CardHeaderContent>
@@ -65,8 +66,7 @@
     </MudCardContent>
 </MudCard>
 
-@code {
-    //market number, poc, stores
+@code {    
     private string searchString = "";
     private TableModels.Market market = new TableModels.Market();
     private List<TableModels.Market> markets = new List<TableModels.Market>();
@@ -75,11 +75,20 @@
     private TableModels.PointOfContact poc = new TableModels.PointOfContact();
 
 
+    /// <summary>
+    /// When the page is initialized call market service to get the data from the market table
+    /// </summary>
+    /// <returns>All records in the Market Table</returns>
     protected override async Task OnInitializedAsync()
     {
         markets = marketService.GetAll();
     }
 
+    /// <summary>
+    /// Provides search functionality
+    /// </summary>
+    /// <param name="market">the name of the object we are working with</param>
+    /// <returns>the record of the object that contains our search string, if it exists</returns>
     private bool Search(TableModels.Market market)
     {
         if (string.IsNullOrWhiteSpace(searchString)) return true;           
@@ -91,6 +100,11 @@
         return false;
     }
 
+    
+    /// <summary>
+    /// Uses market service to get all records in the data set
+    /// </summary>
+    /// <returns>all records in the data set</returns>
     private List<TableModels.Market> GetAll()
     {
         markets = marketService.GetAll();
@@ -98,6 +112,10 @@
         
     }
 
+    
+    /// <summary>
+    /// Uses store service to add a record to the store table
+    /// </summary>
     private void Add()
     {
         if (market.Id == 0)
@@ -110,16 +128,24 @@
         }
         market = new TableModels.Market();
         snackBar.Add("Store successfully updated", Severity.Success);
-        GetAll();
-        
+        GetAll();        
     }
 
+    /// <summary>
+    /// Uses market service to update an record in the market table
+    /// </summary>
+    /// <param name="record">the record we are updating</param>
     private void Update(TableModels.Market record)
     {
         market = record;
         StateHasChanged();
     }
 
+    /// <summary>
+    /// A task used to Delete a record from the Market Table
+    /// </summary>
+    /// <param name="record">the name of the record we are removing</param>
+    /// <returns>An updated table with the named record removed</returns>
     private async Task Delete(TableModels.Market record)
     {
         bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
@@ -128,10 +154,13 @@
             marketService.Delete(record);
             snackBar.Add("Store Deleted!", Severity.Success);
             GetAll();
-        }
-        
+        }        
     }
 
+    /// <summary>
+    /// Adds pagination to the tables for easier viewing
+    /// </summary>
+    /// <param name="i">the number page we are currently viewing</param>
     private void PageChanged(int i)
     {
         _table.NavigateTo(i - 1);

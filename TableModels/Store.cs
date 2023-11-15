@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace TableModels
 {
+    /// <summary>
+    /// A model used to structure the Store Table 
+    /// </summary>
     public class Store
     {
         [Key]

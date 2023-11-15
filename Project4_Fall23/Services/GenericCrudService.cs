@@ -24,11 +24,20 @@ namespace Project4_Fall23.Services
             this.context = context;
         }
 
+        /// <summary>
+        /// retrieves the context created in the context class
+        /// </summary>
+        /// <returns></returns>
         public ApplicationDbContext GetContext()
         {
             return context;
         }
 
+        /// <summary>
+        /// Adds a record to a table
+        /// </summary>
+        /// <param name="entity">a generic value that will change depending on the class we use to plug into the services T</param>
+        /// <returns>true of entity added, false if unable to add</returns>
         public bool Add(T entity)
         {
             try
@@ -39,6 +48,11 @@ namespace Project4_Fall23.Services
             catch { return false; }
         }
 
+        /// <summary>
+        /// Deletes a record from a table
+        /// </summary>
+        /// <param name="entity">a generic value that will change depending on the class we use to plug into the services T</param>
+        /// <returns>true if entity added, false if unable to remove</returns>
         public bool Delete(T entity)
         {
             try
@@ -49,16 +63,30 @@ namespace Project4_Fall23.Services
             catch { return false; }
         }
 
+        /// <summary>
+        /// Creates a list of all records in the Class we are plugging in to T
+        /// </summary>
+        /// <returns>all records that belong to a given table</returns>
         public List<T> GetAll()
         {
             return context.Set<T>().ToList();
         }
 
+        /// <summary>
+        /// a class to retrieve a record based off primary key
+        /// </summary>
+        /// <param name="id">the primary key for a given table</param>
+        /// <returns>the record that contains the primary key</returns>
         public T GetById(int id)
         {
             return context.Set<T>().Find(id);
         }
 
+        /// <summary>
+        /// updates a record in a given tale
+        /// </summary>
+        /// <param name="entity">a generic value that will change depending on the class we use to plug into the services T</param>
+        /// <returns>true if updated, false if unable to update</returns>
         public bool Update(T entity)
         {
             try

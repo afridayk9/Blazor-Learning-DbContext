@@ -8,12 +8,10 @@
 @inject IJSRuntime JsRuntime
 
 
+<!--Display all records in POC Table-->
 <MudText Typo="Typo.h4">Points of Contact</MudText>
 <MudTable RowsPerPage="12" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
           Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" SortLabel="SortBy" @bind-pointOfContact="pointOfContact">
-          
-
-
     <ToolBarContent>
         <MudText Typo="Typo.h6">Points of Contact</MudText>
         <MudSpacer />
@@ -63,7 +61,7 @@
 
 <br/>
 
-<!--Add/Edit POC-->
+<!--Add/Edit Record in POC Table-->
 <MudCard Elevation="25"> 
     <MudCardHeader>
         <CardHeaderContent>
@@ -104,16 +102,25 @@
 
 @code {
     private string searchString = "";
-    
+
     private TableModels.PointOfContact pointOfContact = new TableModels.PointOfContact();
     private List<TableModels.PointOfContact> Pocs = new List<TableModels.PointOfContact>();
     private MudTable<TableModels.PointOfContact> _table;
 
+    /// <summary>
+    /// When the page is initialized call point of contact service to get the data from the point of contact table
+    /// </summary>
+    /// <returns>All records from the POC Table</returns>
     protected override async Task OnInitializedAsync()
     {
         Pocs = pointOfContactService.GetAll();
     }
 
+    /// <summary>
+    /// Provides search functionality
+    /// </summary>
+    /// <param name="pointOfContact">the name of the object we are working with</param>
+    /// <returns>the record of the object that contains our search string, if it exists</returns>
     private bool Search(TableModels.PointOfContact pointOfContact)
     {
         if (string.IsNullOrWhiteSpace(searchString)) return true;           
@@ -137,12 +144,20 @@
         return false;
     }
 
+    
+     /// <summary>
+    /// Uses point of contact service to get all records in the data set
+    /// </summary>
+    /// <returns>all records in the data set</returns>
     private List<TableModels.PointOfContact> GetAll()
     {
         Pocs = pointOfContactService.GetAll();
         return Pocs;
     }
 
+    /// <summary>
+    /// Uses point of contact service to add a record to the point of contact table
+    /// </summary>
     private void Add()
     {
         if(pointOfContact.Id == 0)
@@ -158,12 +173,21 @@
         GetAll();
     }
 
+    /// <summary>
+    /// Uses point of contact service to update an record in the point of contact table
+    /// </summary>
+    /// <param name="record">the record we are updating</param>
     private void Update(TableModels.PointOfContact record)
     {
         pointOfContact = record;
         StateHasChanged();
     }
 
+    /// <summary>
+    /// A task used to Delete a record from the point of contact Table
+    /// </summary>
+    /// <param name="record">the name of the record we are removing</param>
+    /// <returns>An updated table with the named record removed</returns>
     private async Task Delete(TableModels.PointOfContact record)
     {
         bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
@@ -175,7 +199,11 @@
         }
     }
 
-   private void PageChanged(int i)
+   /// <summary>
+    /// Adds pagination to the tables for easier viewing
+    /// </summary>
+    /// <param name="i">the number page we are currently viewing</param>
+    private void PageChanged(int i)
     {
         _table.NavigateTo(i - 1);
     }

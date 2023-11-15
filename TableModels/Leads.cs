@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace TableModels
 {
+    /// <summary>
+    /// a model used to structure the data in the Leads table
+    /// </summary>
     public class Leads
     {
         [Key]

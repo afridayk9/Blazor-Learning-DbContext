@@ -8,11 +8,10 @@
 @inject IDialogService DialogueService
 @inject IJSRuntime JsRuntime
 
+<!--Display all records in Store Table-->
 <MudText Typo="Typo.h4">Stores</MudText>
 <MudTable RowsPerPage="12" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
           Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" SortLabel="SortBy" @bind-store="store">
-
-
     <ToolBarContent>
         <MudText Typo="Typo.h6">Stores</MudText>
         <MudSpacer />
@@ -66,7 +65,7 @@
 
 <br/>
 
-<!--Add/Edit POC-->
+<!--Add/Edit Record in Store Table-->
 <MudCard Elevation="25"> 
     <MudCardHeader>
         <CardHeaderContent>
@@ -115,15 +114,24 @@
     private TableModels.PointOfContact poc = new TableModels.PointOfContact();
 
 
+    /// <summary>
+    /// When the page is initialized call store service to get the data from the store table
+    /// </summary>
+    /// <returns>All records in the Store Table</returns>
     protected override async Task OnInitializedAsync()
     {
         stores = storeService.GetAll();
     }
 
+    /// <summary>
+    /// Provides search functionality
+    /// </summary>
+    /// <param name="store">the name of the object we are working with</param>
+    /// <returns>the record of the object that contains our search string, if it exists</returns>
     private bool Search(TableModels.Store store)
     {
         if (string.IsNullOrWhiteSpace(searchString)) return true;           
-        
+
         if (store.StoreNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
         {
             return true;
@@ -131,12 +139,19 @@
         return false;
     }
 
+    /// <summary>
+    /// Uses store service to get all records in the data set
+    /// </summary>
+    /// <returns>all records in the data set</returns>
     private List<TableModels.Store> GetAll()
     {
         stores = storeService.GetAll();
         return stores;
     }
 
+    /// <summary>
+    /// Uses store service to add a record to the store table
+    /// </summary>
     private void Add()
     {
         if (store.Id == 0)
@@ -152,12 +167,21 @@
         GetAll();
     }
 
+    /// <summary>
+    /// Uses store service to update an record in the store table
+    /// </summary>
+    /// <param name="record">the record we are updating</param>
     private void Update(TableModels.Store record)
     {
         store = record;
         StateHasChanged();
     }
 
+    /// <summary>
+    /// A task used to Delete a record from the Store Table
+    /// </summary>
+    /// <param name="record">the name of the record we are removing</param>
+    /// <returns>An updated table with the named record removed</returns>
     private async Task Delete(TableModels.Store record)
     {
         bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
@@ -169,9 +193,12 @@
         }
     }
 
+    /// <summary>
+    /// Adds pagination to the tables for easier viewing
+    /// </summary>
+    /// <param name="i">the number page we are currently viewing</param>
     private void PageChanged(int i)
     {
         _table.NavigateTo(i - 1);
     }
-
 }

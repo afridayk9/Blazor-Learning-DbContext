@@ -1,26 +1,116 @@
 ﻿@page "/ooo"
-
+<!--This page only exist as a checklist for me keep track of where I am-->
 <h3>Order of Operations</h3>
 
-<ol>
-    <li>Download Mudblazor</li>
-    <li>Create new Mudblazor project and clean it just like you would a standard blazor project</li>
-    <li>Install NuGet Packages. 1.Microsoft.EntityFrameworkCore 2.Microsoft.EntityFrameworkCore.SQLite 3. Microsoft.EntityFrameworkCore.Tools 4.MudBlazor </li>
-    <li>Create a new project in the solution to contain the table models</li>
-    <li>Create a new class in original project called DbContext(along those lines)</li>
-    <li>Register the class you just created in the Program.cs file</li>
-    <li>Head over to appsettings.json to create the connection string need</li>
-    <li>Add connection string the db context in program.cs</li>
-    <li>Open up package manager console and type in "add-migration Name_of_Migration". Without the quotes and name_of_migration can be anything</li>
-    <li>After migration folder is added to the project, type "update-database" in package manager console to create the tables</li>
-    <li>Verify table creation in your DB interface</li>
-    <li>Create the Generic Interface</li>
-    <li>Create a Generic Service that inherits from the Generic Interface</li>
-    <li>Create a service for each of your table model classes and make them inherit from the generic service you just created</li>
-    <li>Register the services you just created in the _imports.razor file</li>
-    <li>Create necessary blazor components to display information in your db</li>
-</ol>
+<MudList Clickable="true">
+    <MudListItem Text="Download Mudblazor">
+        <NestedList>
+            <MudListItem Text="https://mudblazor.com/" />
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Create new Mudblazor project and clean it just like you would a standard blazor project">
+        <NestedList>
+            <MudListItem Text="Get rid of Weather and Counter components and references"/>
+            <MudListItem Text="I like to keep Index for notes to self while im working on the project"/>
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Install NuGet Packages">
+        <NestedList>
+            <MudListItem Text="Microsoft.EntityFrameworkCore"/>
+            <MudListItem Text="Microsoft.EntityFrameworkCore.Sqlite"/>
+            <MudListItem Text="Microsoft.EntityFrameworkCore.Tools"/>
+            <MudListItem Text="Mudblazor"/>
+            <MudListItem Text="*Note: If you started off with a MudBlazor Template, you should not need to download a package for Mudblazor"/>             
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Create a new/2nd project within the solution.">
+        <NestedList>
+            <MudListItem Text="This project should be a Class Library" />
+            <MudListItem Text="This project will contain the Data Models for the Tables in your Database" />
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Add data models to 2nd project by making creating a new class">
+        <NestedList>
+            <MudListItem Text="If you are using the [Key] annotation to label your primary Key, you will a need a using statement at the top"/>
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Go back into 1st project a create a new class to contain your DB context">
+        <NestedList>
+            <MudListItem Text="This class will inherit from DbContext"/>
+            <MudListItem Text="Create a DbSet getter/setter. This will create your tables later when we run the migration" />
+            <MudListItem Text="You will need one DbSet statement for each table model you created"/>
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Register the Db Context Class you just created in program.cs.">
+        <NestedList>
+            <MudListItem Text="Your opening method will be AddDbContext and will take in the name of the context class you just created." />
+            <MudListItem Text="Use a lamba to set options according to the specific DB management system you are using" />
+            <MudListItem Text="Let method for your DbManager statment take in a connection string(we are going to set this next)"/>
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Open up the appsettings.json file and add your connection string">
+        <NestedList>
+            <MudListItem Text="I used DefaultConnection as the name of my string, but you can name it whatever you want." />
+            <MudListItem Text="Your connection string is the file path to where you Db Exist" />
+            <MudListItem Text="Make sure whatever you name the connection matches what you named the connection string in the previous step"/>
+            <MudListItem Text="I self contained the Db in this project for grading purposes only. Don't do this for real world/widely distributed applications"/>
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="If you haven't done so already, open up your Db Manager and create a new data base'">
+        <NestedList>
+            <MudListItem Text="Do not add any tables, we will do this next"/>
+            <MudListItem Text="If you are using SQLite, add this new file to the Data folder of the first project" />
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Use Package Manager Console to add your migrations and update the Db">
+        <NestedList>
+            <MudListItem Text="Type add-migration NameYourMigration (can be whatever you want) and it Enter. This will create a migration folder that contains the sql language needed to created your Db Tables" />
+            <MudListItem Text="After the migration is ran, type update-database and it Enter. This will create the tables in your Db. Open up your Db Management System to confirm the new tables" />
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Create your GitHub repository if you havent done so already.">
+        <NestedList>
+            <MudListItem Text="If you already have a repository, comit and push" />
+        </NestedList>
+    </MudListItem>    
+    <MudListItem Text="Create a new folder in project 1 to contain your interfaces">
+        <NestedList>
+            <MudListItem Text="I used a Generic Interface that takes in a Generic where T is a class" />
+            <MudListItem Text="Create the methods necessary for CRUD operations" />
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Create a new folder in project 1 to contain your services">
+        <NestedList>
+            <MudListItem Text="Create a Generic Service that inherits from the Generic Interface and implement that interface" />
+            <MudListItem Text="Make sure you create an instance of your Db Context class in this Service" />
+            <MudListItem Text="Add the logic for CRUD operations in their corresponding Methods"/>
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Create individual Services for each of your table models">
+        <NestedList>
+            <MudListItem Text="Make all of these services inherit from the Generic Service class you just created. " />
+            <MudListItem Text="Optional: You can use an inject statment in the _imports.razor file to save you needing to inject it on each indivual component you create. "/>
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Go back to program.cs to register the individual services you just created">
+        <NestedList>
+            <MudListItem Text="You will need register each individual service you created" />
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Create a new/2nd project within the solution.">
+        <NestedList>
+            <MudListItem Text="This project should be a Class Library" />
+            <MudListItem Text="This project will contain the Data Models for the Tables in your Database" />
+        </NestedList>
+    </MudListItem>
+    <MudListItem Text="Create necessary Blazor Components for the UI">
+        <NestedList>
+            <MudListItem Text="This is going to be highly situaional depending on what you are doing specifically." />
+            <MudListItem Text="Refer to my components for an idea of how I have everything laid out." />
+        </NestedList>
+    </MudListItem>    
+</MudList>
 
-@code {
 
-}
+
+
