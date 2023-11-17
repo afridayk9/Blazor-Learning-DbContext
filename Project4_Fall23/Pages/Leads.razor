@@ -10,7 +10,7 @@
 
 <!--Display all records in the Leads Table-->
 <MudText Typo="Typo.h4">Leads</MudText>          
-<MudTable RowsPerPage="12" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+<MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
           Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" @bind-lead="lead">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Leads</MudText>

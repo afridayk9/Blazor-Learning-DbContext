@@ -27,7 +27,7 @@ namespace Project4_Fall23.Services
         /// <summary>
         /// retrieves the context created in the context class
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Db Context</returns>
         public ApplicationDbContext GetContext()
         {
             return context;

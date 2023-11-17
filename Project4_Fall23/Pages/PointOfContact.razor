@@ -10,7 +10,7 @@
 
 <!--Display all records in POC Table-->
 <MudText Typo="Typo.h4">Points of Contact</MudText>
-<MudTable RowsPerPage="12" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+<MudTable RowsPerPage="5" @ref="@_table" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
           Style="color: white" Elevation="25" Items="GetAll()" Filter="Search" SortLabel="SortBy" @bind-pointOfContact="pointOfContact">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Points of Contact</MudText>
